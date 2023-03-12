@@ -8,7 +8,6 @@ public class Main {
     static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
     static ArrayList<Obra> obras = new ArrayList<Obra>();
     static ArrayList<Pedido> pedidos = new ArrayList<Pedido>();
-
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         int opcion = 0;
@@ -46,7 +45,6 @@ public class Main {
             }
         } while (opcion != 6);
     }
-
     public static void crearObra() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("¿Tipo?");
@@ -71,43 +69,6 @@ public class Main {
         }
         System.out.println("Obra añadida");
     }
-
-
-
-    public static void crearPedido() {
-        Scanner scanner = new Scanner(System.in);
-        int clienteIndex;
-        do {
-            System.out.println("¿Para qué cliente desea crear el pedido?");
-            mostrarClientes();
-            clienteIndex = scanner.nextInt() - 1;
-            scanner.nextLine(); // Consumir la línea vacía
-        } while (clienteIndex < 0 || clienteIndex >= clientes.size());
-
-        Cliente cliente = clientes.get(clienteIndex);
-
-        Pedido pedido = new Pedido(cliente);
-
-        int obraIndex;
-        do {
-            System.out.println("¿Qué obra agregar al pedido?");
-            mostrarObras();
-            obraIndex = scanner.nextInt() - 1;
-            scanner.nextLine(); // Consumir la línea vacía
-            if (obraIndex >= 0 && obraIndex < obras.size() - 1) {
-                pedido.agregarObra(obras.get(obraIndex));
-                System.out.println("Obra agregada al pedido.");
-            }
-        } while (obraIndex != obras.size() - 1);
-
-        if (pedido.getObras().size() > 0) {
-            pedidos.add(pedido);
-            System.out.println("Pedido creado.");
-        } else {
-            System.out.println("El pedido está vacío y no se puede crear.");
-        }
-    }
-
     public static void mostrarPedidos() {
         if (pedidos.isEmpty()) {
             System.out.println("No hay pedidos registrados");
@@ -116,7 +77,8 @@ public class Main {
         for (Pedido pedido : pedidos) {
             System.out.println("Pedido para " + pedido.getCliente().getNombre());
             for (Obra obra : pedido.getObras()) {
-                System.out.println("  - " + obra.toString());
+                System.out.println("  - ");
+                obra.mostrarInformacion();
             }
         }
     }
@@ -141,16 +103,43 @@ public class Main {
             System.out.println("Cliente n°." + (i+1) + ": " + clientes.get(i).getNombre());
         }
     }
-
+    public static void crearPedido() {
+        Scanner scanner = new Scanner(System.in);
+        int clienteIndex;
+        do {
+            System.out.println("¿Para qué cliente desea crear el pedido?");
+            mostrarClientes();
+            clienteIndex = scanner.nextInt() - 1;
+            scanner.nextLine(); // Consumir la línea vacía
+        } while (clienteIndex < 0 || clienteIndex >= clientes.size());
+        Cliente cliente = clientes.get(clienteIndex);
+        Pedido pedido = new Pedido(cliente);
+        int obraIndex;
+        do {
+            System.out.println("¿Qué obra agregar al pedido?");
+            mostrarObras();
+            obraIndex = scanner.nextInt() - 1;
+            scanner.nextLine(); // Consumir la línea vacía
+            if (obraIndex >= 0 && obraIndex < obras.size()) {
+                pedido.agregarObra(obras.get(obraIndex));
+                System.out.println("Obra agregada al pedido.");
+            }
+        } while (obraIndex != obras.size());
+        if (pedido.getObras().size() > 0) {
+            pedidos.add(pedido);
+            System.out.println("Pedido creado.");
+        } else {
+            System.out.println("El pedido está vacío y no se puede crear.");
+        }
+    }
     public static void mostrarObras() {
         if (obras.isEmpty()) {
             System.out.println("No hay obras registradas");
             return;
         }
-        for (Obra obra : obras) {
-            System.out.println(obra.toString());
+        for (int i = 0; i < obras.size(); i++) {
+            System.out.println("Obra n°." + (i+1) + ": " + obras.get(i).getTitulo());
         }
+        System.out.println("Obra n°." + (obras.size()+1) + ": Salir");
     }
-
-
 }
